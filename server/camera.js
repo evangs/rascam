@@ -30,7 +30,7 @@ function takeStill(response){
     if (error === null) {
       path.exists(filename, function(exists){
         if (exists) {
-          sendImage(response, filenames)
+          sendImage(response, filename)
         } else {
           status.notFound(response);
         }
