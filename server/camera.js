@@ -36,4 +36,17 @@ function takeStill(response){
   });
 };
 
+function staticImage(response){
+  var filename = 'testimg.jpg';
+  fs.exists(filename, function(exists){
+    if (exists) {
+      console.log('about to send image');
+      sendImage(response, filename);
+    } else {
+      status.notFound(response);
+    }
+  });
+};
+
 module.exports.takeStill = takeStill;
+module.exports.staticImage = staticImage;

@@ -9,6 +9,8 @@ function startServer(port, hostname){
       status.ping(response);
     } else if (request.url === '/take-still'){
       camera.takeStill(response);
+    } else if (request.url === '/static-img'){
+      camera.staticImage(response);
     } else {
       status.notFound(response);
     }
