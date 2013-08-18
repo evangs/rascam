@@ -20,7 +20,7 @@ function takeStill(response){
   // take a still photo and send it back in the response
   var date = new Date()
   var filename = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '-' + date.getTime() + '.jpg';
-  exec('raspistill -vf -t 0 -e jpg -q 75 -n -o ' + filename, function (error, stdout, stderr) {
+  exec('raspistill -vf -t 0 -e jpg -q 75 -o ' + filename, function (error, stdout, stderr) {
     if (error === null) {
       fs.exists(filename, function(exists){
         if (exists) {
