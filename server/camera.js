@@ -1,7 +1,5 @@
 var exec = require('child_process').exec;
-var path = require('path');
 var fs = require('fs');
-var util = require('util');
 var status = require('./status');
 
 function sendImage(response, filename){
@@ -14,11 +12,7 @@ function sendImage(response, filename){
     });
     rs = fs.createReadStream(filename);
     console.log('about to pump file');
-    util.pump(rs, response, function(err) {
-      if(err) {
-        throw err;
-      }
-    });
+    rs.pipe(response);
   });
 };
 
@@ -28,7 +22,7 @@ function takeStill(response){
   var filename = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '-' + date.getTime() + '.jpg';
   exec('raspistill -vf -t 0 -o ' + filename, function (error, stdout, stderr) {
     if (error === null) {
-      path.exists(filename, function(exists){
+      fs.exists(filename, function(exists){
         if (exists) {
           console.log('about to send image');
           sendImage(response, filename);
