@@ -28,7 +28,8 @@ function takeStill(response){
     if (error === null) {
       path.exists(filename, function(exists){
         if (exists) {
-          sendImage(response, filename)
+          console.log('about to send image');
+          sendImage(response, filename);
         } else {
           status.notFound(response);
         }
