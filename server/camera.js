@@ -22,7 +22,7 @@ function sendImage(response, filename){
 function takeStill(response){
   // take a still photo and send it back in the response
   var date = new Date()
-  var filename = '/home/pi/rascam/server/(date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '-' + date.getTime() + '.jpg';
+  var filename = '/home/pi/rascam/server/' + (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '-' + date.getTime() + '.jpg';
   exec('raspistill -vf -t 0 -e jpg -q 75 -o ' + filename + ' -w 640 -h 480', function (error, stdout, stderr) {
     if (error === null) {
       fs.exists(filename, function(exists){
