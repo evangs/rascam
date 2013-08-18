@@ -1,14 +1,35 @@
 var exec = require('child_process').exec;
+var path = require('path');
+var fs = require('fs');
+
+function fiveHundred(response){
+	response.writeHead(500, { 'Content-Type': 'text/plain' });
+	response.end('error taking still', 'utf-8');
+};
+
+function sendImage(response, img){
+	response.writeHead(200, { 'Content-Type': 'image/jpg' });
+	response.end(img, 'binary');
+};
 
 function takeStill(response){
 	// take a still photo and send it back in the response
-	exec('raspistill -vf -t 0 -o -', function (error, stdout, stderr) {
+	var date = new Date()
+	var filename = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '-' + date.getTime() + '.jpg';
+	exec('raspistill -vf -t 0 -o ' + filename, function (error, stdout, stderr) {
 		if (error === null) {
-			response.writeHead(200, { 'Content-Type': 'image/jpg' });
-			response.end(stdout, 'binary');
+			path.exists(filename, function(exists){
+				fs.readFile(filename, function(error, content) {
+					if (error) {
+						fiveHundred(response);
+					}
+					else {
+						sendImage(response, content)
+					}
+				})
+			})
 		} else {
-			response.writeHead(500, { 'Content-Type': 'text/plain' });
-			response.end('error taking still', 'utf-8');
+			fiveHundred(response);
 		}
 	});
 };
