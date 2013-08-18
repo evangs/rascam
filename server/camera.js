@@ -3,7 +3,6 @@ var fs = require('fs');
 var status = require('./status');
 
 function sendImage(response, filename){
-  console.log(filename);
   fs.stat(filename, function(error, stat) {
     var rs;
     response.writeHead(200, {
@@ -11,12 +10,10 @@ function sendImage(response, filename){
       'Content-Length' : stat.size
     });
     rs = fs.createReadStream(filename);
-    console.log('about to pump file');
     rs.pipe(response);
     rs.on('end', function() {
       fs.unlink(filename, function (err) {
         if (err) throw err;
-        console.log('successfully deleted ' + filename);
       });
     });
   });
@@ -30,7 +27,6 @@ function takeStill(response){
     if (error === null) {
       fs.exists(filename, function(exists){
         if (exists) {
-          console.log('about to send image');
           sendImage(response, filename);
         } else {
           status.notFound(response);
@@ -42,17 +38,4 @@ function takeStill(response){
   });
 };
 
-function staticImage(response){
-  var filename = 'testimg.jpg';
-  fs.exists(filename, function(exists){
-    if (exists) {
-      console.log('about to send image');
-      sendImage(response, filename);
-    } else {
-      status.notFound(response);
-    }
-  });
-};
-
 module.exports.takeStill = takeStill;
-module.exports.staticImage = staticImage;
