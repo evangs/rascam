@@ -18,8 +18,6 @@ function sendImage(response, filename){
       }
     });
   });
-  response.writeHead(200, { 'Content-Type': 'image/jpg' });
-  response.end(img, 'binary');
 };
 
 function takeStill(response){
