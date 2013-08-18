@@ -14,6 +14,10 @@ function sendImage(response, filename){
     console.log('about to pump file');
     rs.pipe(response);
   });
+  fs.unlink(filename, function (err) {
+    if (err) throw err;
+    console.log('successfully deleted ' + filename);
+  });
 };
 
 function takeStill(response){
@@ -26,7 +30,6 @@ function takeStill(response){
         if (exists) {
           console.log('about to send image');
           sendImage(response, filename);
-          fs.unlinkSync(filename);
         } else {
           status.notFound(response);
         }
