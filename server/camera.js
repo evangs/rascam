@@ -29,6 +29,7 @@ function takeStill(response){
         if (exists) {
           sendImage(response, filename);
         } else {
+          console.log(stderr);
           status.notFound(response);
         }
       });
