@@ -7,7 +7,7 @@ function sendImage(response, filename){
   fs.stat(filename, function(error, stat) {
     var rs;
     response.writeHead(200, {
-      'Content-Type' : 'image/png',
+      'Content-Type' : 'image/jpeg',
       'Content-Length' : stat.size
     });
     rs = fs.createReadStream(filename);
@@ -19,8 +19,8 @@ function sendImage(response, filename){
 function takeStill(response){
   // take a still photo and send it back in the response
   var date = new Date()
-  var filename = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '-' + date.getTime() + '.png';
-  exec('raspistill -vf -t 0 -e png -q 75 -o ' + filename, function (error, stdout, stderr) {
+  var filename = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '-' + date.getTime() + '.jpg';
+  exec('raspistill -vf -t 0 -e jpg -q 75 -o ' + filename + ' -w 640 -h 480', function (error, stdout, stderr) {
     if (error === null) {
       fs.exists(filename, function(exists){
         if (exists) {
