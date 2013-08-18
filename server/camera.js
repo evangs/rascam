@@ -26,10 +26,7 @@ function takeStill(response){
         if (exists) {
           console.log('about to send image');
           sendImage(response, filename);
-          fs.unlink(filename, function (err) {
-            if (err) throw err;
-            console.log('successfully deleted ' + filename);
-          });
+          fs.unlinkSync(filename);
         } else {
           status.notFound(response);
         }
