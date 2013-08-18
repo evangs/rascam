@@ -10,5 +10,11 @@ function notFound(response){
   response.end('not found', 'utf-8');
 };
 
+function serverError(response){
+  response.writeHead(500, { 'Content-Type': 'text/plain' });
+  response.end('server error', 'utf-8');
+};
+
 module.exports.ping = ping;
 module.exports.notFound = notFound;
+module.exports.serverError = serverError;

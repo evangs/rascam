@@ -1,14 +1,23 @@
 var exec = require('child_process').exec;
 var path = require('path');
 var fs = require('fs');
+var util = require('util');
 var status = require('./status');
 
-function fiveHundred(response){
-  response.writeHead(500, { 'Content-Type': 'text/plain' });
-  response.end('error taking still', 'utf-8');
-};
-
-function sendImage(response, img){
+function sendImage(response, filename){
+  fs.stat(filename, function(error, stat) {
+    var rs;
+    response.writeHead(200, {
+      'Content-Type' : 'image/jpeg',
+      'Content-Length' : stat.size
+    });
+    rs = fs.createReadStream(filename);
+    util.pump(rs, response, function(err) {
+      if(err) {
+        throw err;
+      }
+    });
+  });
   response.writeHead(200, { 'Content-Type': 'image/jpg' });
   response.end(img, 'binary');
 };
@@ -21,20 +30,13 @@ function takeStill(response){
     if (error === null) {
       path.exists(filename, function(exists){
         if (exists) {
-          fs.readFile(filename, function(error, content) {
-            if (error) {
-              fiveHundred(response);
-            }
-            else {
-              sendImage(response, content);
-            }
-          });
+          sendImage(response, filenames)
         } else {
           status.notFound(response);
         }
       });
     } else {
-      fiveHundred(response);
+      status.serverError(response);
     }
   });
 };
