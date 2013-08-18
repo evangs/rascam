@@ -13,10 +13,12 @@ function sendImage(response, filename){
     rs = fs.createReadStream(filename);
     console.log('about to pump file');
     rs.pipe(response);
-  });
-  fs.unlink(filename, function (err) {
-    if (err) throw err;
-    console.log('successfully deleted ' + filename);
+    rs.on('end', function() {
+      fs.unlink(filename, function (err) {
+        if (err) throw err;
+        console.log('successfully deleted ' + filename);
+      });
+    });
   });
 };
 
