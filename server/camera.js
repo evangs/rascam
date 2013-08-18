@@ -5,6 +5,7 @@ var util = require('util');
 var status = require('./status');
 
 function sendImage(response, filename){
+  console.log(filename);
   fs.stat(filename, function(error, stat) {
     var rs;
     response.writeHead(200, {
@@ -12,6 +13,7 @@ function sendImage(response, filename){
       'Content-Length' : stat.size
     });
     rs = fs.createReadStream(filename);
+    console.log('about to pump file');
     util.pump(rs, response, function(err) {
       if(err) {
         throw err;
